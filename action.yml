@@ -1,4 +1,4 @@
-name: 'Conventional Commits Linter'
+name: 'Conventional Commits'
 
 description: 'Lint commits messages.'
 
@@ -12,16 +12,32 @@ inputs:
     required: false
     default: 'HEAD'
 
+outputs:
+  patch:
+    description: "Count of patch commits"
+    value: ${{ steps.commits.outputs.patch }}
+  minor:
+    description: "Count of minor commits"
+    value: ${{ steps.commits.outputs.minor }}
+  major:
+    description: "Count of major commits"
+    value: ${{ steps.commits.outputs.major }}
+
+
 runs:
   using: "composite"
   steps:
     - name: "Check commits messages"
+      id: commits
       run: |
         if [[ "" != $(git log --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }}) ]]; then
-          echo "The following commit messages are invalid:"
+          echo "The following commits message are invalid:"
           git log --oneline --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }}
           exit 1
-        else
-          echo "Commits messages are valid."
         fi
+
+        echo patch=$(git log --oneline --extended-regexp --grep="^(fix){1}(\([[:alnum:]._-]+\))?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
+        echo minor=$(git log --oneline --extended-regexp --grep="^(feat){1}(\([[:alnum:]._-]+\))?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
+        echo major=$(git log --oneline --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!): ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
+
       shell: bash
