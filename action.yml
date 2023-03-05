@@ -2,6 +2,10 @@ name: 'Conventional Commits Linter'
 
 description: 'Lint commits messages.'
 
+branding:
+  icon: check-circle
+  color: gray-dark
+
 inputs:
   git-range:
     description: 'Range of commits.'
