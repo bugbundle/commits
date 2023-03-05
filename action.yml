@@ -6,7 +6,9 @@ runs:
   using: "composite"
   steps:
     - run: |
-        test "" != $(git log --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)") || {
+        if [[ "" != $(git log --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)") ]]; then
+          echo "Foud the following commit messages:"
+          git log --oneline --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)"
           exit 1
-        }
-      shell: sh
+        fi
+      shell: bash
