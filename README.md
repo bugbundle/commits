@@ -13,7 +13,36 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: bugbundle/commits@v1
+      - uses: bugbundle/commits@v1.0.0
 ```
 
-> **Note** You can check previous commits by adding the `fetch-depth` parameters while using `actions/checkout`.
+> **Note** You can check previous commits by adding the `fetch-depth` parameter while using `actions/checkout`.
+
+### Inputs
+
+- `git-range`, default 'HEAD':
+  Range of commits.
+
+
+### Outputs
+
+- `patch`, Count of patch commits
+- `minor`, Count of minor commits
+- `major`, Count of major commits
+
+### Pull request integration
+
+```yaml
+name: Check current commit
+on: [pull_request]
+
+jobs:
+  dev:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: ${{ github.event.pull_request.commits }}
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: bugbundle/commits@v1.0.0
+```
