@@ -1,0 +1,12 @@
+name: 'Conventional Commits Linter'
+
+description: 'Lint commits'
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        test "" != $(git log --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)" --invert-grep) || {
+          exit 1
+        }
+      shell: bash
