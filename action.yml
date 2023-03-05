@@ -6,7 +6,7 @@ runs:
   using: "composite"
   steps:
     - run: |
-        test "" != $(git log --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)") || {
+        test "" != $(git log --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)") || {
           exit 1
         }
       shell: sh
