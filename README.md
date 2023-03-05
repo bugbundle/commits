@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: bugbundle/commits@v1.0.0
+      - uses: bugbundle/commits@v1.1.0
 ```
 
 > **Note** You can check previous commits by adding the `fetch-depth` parameter while using `actions/checkout`.
@@ -44,5 +44,7 @@ jobs:
         with:
           fetch-depth: ${{ github.event.pull_request.commits }}
           ref: ${{ github.event.pull_request.head.sha }}
-      - uses: bugbundle/commits@v1.0.0
+      - uses: bugbundle/commits@v1.1.0
+        id: commits
+      - run: echo ${{ steps.commits.outputs.major }}.${{ steps.commits.outputs.minor }}.${{ steps.commits.outputs.patch }}
 ```
