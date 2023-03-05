@@ -2,13 +2,22 @@ name: 'Conventional Commits Linter'
 
 description: 'Lint commits'
 
+inputs:
+  git-range:
+    description: 'Range of commits.'
+    required: false
+    default: 'HEAD'
+
 runs:
   using: "composite"
   steps:
-    - run: |
-        if [[ "" != $(git log --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)") ]]; then
-          echo "Foud the following commit messages:"
-          git log --oneline --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)"
+    - name: "Check commits messages"
+      run: |
+        if [[ "" != $(git log --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }}) ]]; then
+          echo "The following commit messages are invalid:"
+          git log --oneline --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }}
           exit 1
+        else
+          echo "Commits messages are valid."
         fi
       shell: bash
