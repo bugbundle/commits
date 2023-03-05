@@ -1,6 +1,6 @@
 name: 'Conventional Commits Linter'
 
-description: 'Lint commits'
+description: 'Lint commits messages.'
 
 inputs:
   git-range:
