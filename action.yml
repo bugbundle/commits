@@ -14,19 +14,19 @@ inputs:
   conventional-regex:
     description: 'Regex used to determine if a commit is conventional'
     required: false
-    default: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)"
+    default: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([[:alnum:]._-]+\\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)"
   conventional-regex-patch:
     description: 'Regex used to determine if a commit is conventional'
     required: false
-    default: "^(fix){1}(\([[:alnum:]._-]+\))?: ([[:alnum:]])+([[:space:][:print:]]*)"
+    default: "^(fix){1}(\\([[:alnum:]._-]+\\))?: ([[:alnum:]])+([[:space:][:print:]]*)"
   conventional-regex-minor:
     description: 'Regex used to determine if a commit is conventional'
     required: false
-    default: "^(feat){1}(\([[:alnum:]._-]+\))?: ([[:alnum:]])+([[:space:][:print:]]*)"
+    default: "^(feat){1}(\\([[:alnum:]._-]+\\))?: ([[:alnum:]])+([[:space:][:print:]]*)"
   conventional-regex-major:
     description: 'Regex used to determine if a commit is conventional'
     required: false
-    default: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!): ([[:alnum:]])+([[:space:][:print:]]*)"
+    default: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([[:alnum:]._-]+\\))?(!): ([[:alnum:]])+([[:space:][:print:]]*)"
 
 outputs:
   patch:
