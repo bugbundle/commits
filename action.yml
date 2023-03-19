@@ -11,6 +11,22 @@ inputs:
     description: 'Range of commits.'
     required: false
     default: 'HEAD'
+  conventional-regex:
+    description: 'Regex used to determine if a commit is conventional'
+    required: false
+    default: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([[:alnum:]._-]+\\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)"
+  conventional-regex-patch:
+    description: 'Regex used to determine if a commit is conventional'
+    required: false
+    default: "^(fix){1}(\\([[:alnum:]._-]+\\))?: ([[:alnum:]])+([[:space:][:print:]]*)"
+  conventional-regex-minor:
+    description: 'Regex used to determine if a commit is conventional'
+    required: false
+    default: "^(feat){1}(\\([[:alnum:]._-]+\\))?: ([[:alnum:]])+([[:space:][:print:]]*)"
+  conventional-regex-major:
+    description: 'Regex used to determine if a commit is conventional'
+    required: false
+    default: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([[:alnum:]._-]+\\))?(!): ([[:alnum:]])+([[:space:][:print:]]*)"
 
 outputs:
   patch:
@@ -30,14 +46,14 @@ runs:
     - name: "Check commits messages"
       id: commits
       run: |
-        if [[ "" != $(git log --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }}) ]]; then
+        if [[ "" != $(git log --invert-grep --extended-regexp --grep="${{ inputs.conventional-regex }}" ${{ inputs.git-range }}) ]]; then
           echo "The following commits message are invalid:"
-          git log --oneline --invert-grep --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }}
+          git log --oneline --invert-grep --extended-regexp --grep="${{ inputs.conventional-regex }}" ${{ inputs.git-range }}
           exit 1
         fi
 
-        echo patch=$(git log --oneline --extended-regexp --grep="^(fix){1}(\([[:alnum:]._-]+\))?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
-        echo minor=$(git log --oneline --extended-regexp --grep="^(feat){1}(\([[:alnum:]._-]+\))?: ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
-        echo major=$(git log --oneline --extended-regexp --grep="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([[:alnum:]._-]+\))?(!): ([[:alnum:]])+([[:space:][:print:]]*)" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
+        echo patch=$(git log --oneline --extended-regexp --grep="${{ inputs.conventional-regex-patch }}"  ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
+        echo minor=$(git log --oneline --extended-regexp --grep="${{ inputs.conventional-regex-minor }}" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
+        echo major=$(git log --oneline --extended-regexp --grep="${{ inputs.conventional-regex-major }}" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
 
       shell: bash
