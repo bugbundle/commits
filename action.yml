@@ -46,14 +46,14 @@ runs:
     - name: "Check commits messages"
       id: commits
       run: |
-        if [[ "" != $(git log --invert-grep --extended-regexp --grep=${{ inputs.conventional-regex }} ${{ inputs.git-range }}) ]]; then
+        if [[ "" != $(git log --invert-grep --extended-regexp --grep="${{ inputs.conventional-regex }}" ${{ inputs.git-range }}) ]]; then
           echo "The following commits message are invalid:"
-          git log --oneline --invert-grep --extended-regexp --grep=${{ inputs.conventional-regex }} ${{ inputs.git-range }}
+          git log --oneline --invert-grep --extended-regexp --grep="${{ inputs.conventional-regex }}" ${{ inputs.git-range }}
           exit 1
         fi
 
-        echo patch=$(git log --oneline --extended-regexp --grep=${{ inputs.conventional-regex-patch }}  ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
-        echo minor=$(git log --oneline --extended-regexp --grep=${{ inputs.conventional-regex-minor }} ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
-        echo major=$(git log --oneline --extended-regexp --grep=${{ inputs.conventional-regex-major }} ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
+        echo patch=$(git log --oneline --extended-regexp --grep="${{ inputs.conventional-regex-patch }}"  ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
+        echo minor=$(git log --oneline --extended-regexp --grep="${{ inputs.conventional-regex-minor }}" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
+        echo major=$(git log --oneline --extended-regexp --grep="${{ inputs.conventional-regex-major }}" ${{ inputs.git-range }} | wc -l) >> $GITHUB_OUTPUT
 
       shell: bash
